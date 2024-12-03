@@ -16,13 +16,8 @@ public class TaskEntity {
 
     @Column(nullable = false)
     private String title;
-
     private String description;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
-
+    private String status;
     private LocalDate dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

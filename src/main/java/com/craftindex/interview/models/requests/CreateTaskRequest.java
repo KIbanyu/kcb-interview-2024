@@ -9,6 +9,6 @@ import java.time.LocalDate;
 public class CreateTaskRequest {
     private String title;
     private String description;
-    private Status status;
+    private String status;
     private LocalDate dueDate;
 }

@@ -5,10 +5,7 @@ import com.craftindex.interview.entities.TaskEntity;
 import com.craftindex.interview.enums.Status;
 import com.craftindex.interview.models.requests.CreateProjectRequest;
 import com.craftindex.interview.models.requests.CreateTaskRequest;
-import com.craftindex.interview.models.responses.BaseResponse;
-import com.craftindex.interview.models.responses.GetProjectTasksResponse;
-import com.craftindex.interview.models.responses.GetProjectsResponse;
-import com.craftindex.interview.models.responses.ProjectResponse;
+import com.craftindex.interview.models.responses.*;
 import com.craftindex.interview.repos.ProjectRepository;
 import com.craftindex.interview.repos.TaskRepository;
 import com.craftindex.interview.services.ProjectService;
@@ -23,6 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -242,6 +243,30 @@ public class DefaultProjectService implements ProjectService {
 
         }catch (Exception e) {
             throw new RuntimeException("An error occurred while deleting task", e);
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<List<ProjectSummaryResponse>> getProjectsSummary() {
+        try {
+
+            List<ProjectEntity> projects = projectRepository.findAll();
+            List<ProjectSummaryResponse>  projectSummaries = projects.stream()
+                    .map(project -> {
+                        Map<String, Long> taskStatusCounts = taskRepository
+                                .findByProjectEntity(project)
+                                .stream()
+                                .collect(Collectors.groupingBy(TaskEntity::getStatus, Collectors.counting()));
+
+                        return new ProjectSummaryResponse(project, taskStatusCounts.size());
+                    })
+                    .toList();
+
+            return new ResponseEntity<>(projectSummaries, HttpStatus.OK);
+
+        }catch (Exception e) {
+            throw new RuntimeException("An error occurred while getting projects summary", e);
         }
 
     }
