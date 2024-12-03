@@ -2,10 +2,7 @@ package com.craftindex.interview.controller;
 
 import com.craftindex.interview.models.requests.CreateProjectRequest;
 import com.craftindex.interview.models.requests.CreateTaskRequest;
-import com.craftindex.interview.models.responses.BaseResponse;
-import com.craftindex.interview.models.responses.GetProjectTasksResponse;
-import com.craftindex.interview.models.responses.GetProjectsResponse;
-import com.craftindex.interview.models.responses.ProjectResponse;
+import com.craftindex.interview.models.responses.*;
 import com.craftindex.interview.services.ProjectService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -17,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -67,6 +65,10 @@ public class ProjectController {
         return projectService.deleteTask(taskId);
     }
 
+    @GetMapping("/projects/summary")
+    public ResponseEntity<List<ProjectSummaryResponse>> getProjectSummary() {
+        return projectService.getProjectsSummary();
+    }
 
 
 }

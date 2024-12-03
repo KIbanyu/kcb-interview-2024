@@ -106,7 +106,7 @@ class InterviewApplicationTests {
 		request.setTitle("Task 1");
 		request.setDescription("Task description");
 		request.setDueDate(LocalDate.now());
-		request.setStatus(Status.TO_DO);
+		request.setStatus("TO_DO");
 		ProjectEntity projectEntity = new ProjectEntity();
 		projectEntity.setId(1L);
 		when(projectRepository.findById(1L)).thenReturn(Optional.of(projectEntity));
@@ -159,13 +159,13 @@ class InterviewApplicationTests {
 		CreateTaskRequest request = new CreateTaskRequest();
 		request.setTitle("Updated Title");
 		request.setDescription("Updated Description");
-		request.setStatus(Status.IN_PROGRESS);
+		request.setStatus("IN_PROGRESS");
 		request.setDueDate(LocalDate.now().plusDays(5));
 		TaskEntity existingTask = new TaskEntity();
 		existingTask.setId(taskId);
 		existingTask.setTitle("Old Title");
 		existingTask.setDescription("Old Description");
-		existingTask.setStatus(Status.TO_DO);
+		existingTask.setStatus("TO_DO");
 		existingTask.setDueDate(LocalDate.now());
 		Mockito.when(taskRepository.findById(taskId)).thenReturn(Optional.of(existingTask));
 		ResponseEntity<BaseResponse> response = projectService.updateTask(request, taskId);
@@ -174,7 +174,7 @@ class InterviewApplicationTests {
 		assertEquals("Task updated successfully", response.getBody().getMessage());
 		assertEquals("Updated Title", existingTask.getTitle());
 		assertEquals("Updated Description", existingTask.getDescription());
-		assertEquals(Status.IN_PROGRESS, existingTask.getStatus());
+		assertEquals("IN_PROGRESS", existingTask.getStatus());
 		assertEquals(LocalDate.now().plusDays(5), existingTask.getDueDate());
 		Mockito.verify(taskRepository, Mockito.times(1)).save(existingTask);
 	}

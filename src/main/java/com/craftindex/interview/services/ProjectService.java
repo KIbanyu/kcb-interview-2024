@@ -2,14 +2,12 @@ package com.craftindex.interview.services;
 
 import com.craftindex.interview.models.requests.CreateProjectRequest;
 import com.craftindex.interview.models.requests.CreateTaskRequest;
-import com.craftindex.interview.models.responses.BaseResponse;
-import com.craftindex.interview.models.responses.GetProjectTasksResponse;
-import com.craftindex.interview.models.responses.GetProjectsResponse;
-import com.craftindex.interview.models.responses.ProjectResponse;
+import com.craftindex.interview.models.responses.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ProjectService {
     ResponseEntity<BaseResponse> createProject(CreateProjectRequest request);
@@ -19,4 +17,5 @@ public interface ProjectService {
     ResponseEntity<GetProjectTasksResponse> getProjectTasks(long projectId, LocalDate dueDate, String status,Pageable pageable);
     ResponseEntity<BaseResponse> updateTask(CreateTaskRequest request, long taskId);
     ResponseEntity<BaseResponse> deleteTask(long taskId);
+    ResponseEntity<List<ProjectSummaryResponse>> getProjectsSummary();
  }

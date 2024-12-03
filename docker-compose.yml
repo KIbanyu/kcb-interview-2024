@@ -1,0 +1,15 @@
+version: '3'
+services:
+  interview:
+    container_name: interview
+    image: interview
+    expose:
+      - "8082"
+    environment:
+      - PORT=8082
+    ports:
+      - "8082:8082"
+    networks: [ "im" ]     
+networks:
+  im:
+    driver: bridge
