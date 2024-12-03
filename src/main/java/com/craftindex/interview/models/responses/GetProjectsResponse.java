@@ -7,7 +7,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Builder
 public class GetProjectsResponse extends BaseResponse {
     private List<ProjectEntity> projects;
 }

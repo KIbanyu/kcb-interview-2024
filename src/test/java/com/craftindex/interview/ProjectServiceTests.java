@@ -3,13 +3,11 @@ package com.craftindex.interview;
 
 import com.craftindex.interview.entities.ProjectEntity;
 import com.craftindex.interview.entities.TaskEntity;
-import com.craftindex.interview.enums.Status;
 import com.craftindex.interview.models.requests.CreateProjectRequest;
 import com.craftindex.interview.models.requests.CreateTaskRequest;
 import com.craftindex.interview.models.responses.BaseResponse;
 import com.craftindex.interview.repos.ProjectRepository;
 import com.craftindex.interview.repos.TaskRepository;
-import com.craftindex.interview.services.ProjectService;
 import com.craftindex.interview.services.impl.DefaultProjectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class InterviewApplicationTests {
+class ProjectServiceTests {
 
 	@Mock
 	private ProjectRepository projectRepository;

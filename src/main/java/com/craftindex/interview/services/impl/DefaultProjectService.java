@@ -69,10 +69,9 @@ public class DefaultProjectService implements ProjectService {
         try {
             PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("id")));
             Page<ProjectEntity> projects = projectRepository.findAll(pageRequest);
-            GetProjectsResponse getProjectsResponse = GetProjectsResponse.builder()
-                    .projects(projects.getContent())
-                    .build();
+            GetProjectsResponse getProjectsResponse = new GetProjectsResponse();
             getProjectsResponse.setStatus(HttpStatus.OK.value());
+            getProjectsResponse.setProjects(projects.getContent());
             getProjectsResponse.setMessage("Success");
             return new ResponseEntity<>(getProjectsResponse, HttpStatus.OK);
 
@@ -108,8 +107,29 @@ public class DefaultProjectService implements ProjectService {
     @Override
     public ResponseEntity<BaseResponse> createProjectTask(CreateTaskRequest request, long projectId) {
         try {
-            //Check if the project exist
+            //Validate request variables
             BaseResponse baseResponse = new BaseResponse();
+
+            if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
+                return new ResponseEntity<>(new BaseResponse("Title cannot be null or empty", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+
+            if (request.getStatus() == null || request.getStatus().trim().isEmpty()) {
+                return new ResponseEntity<>(new BaseResponse("Status cannot be null or empty", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+
+            if (request.getDueDate() == null) {
+                return new ResponseEntity<>(new BaseResponse("Due date cannot be null", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+
+            // Check if dueDate is today or in the future
+            if (request.getDueDate().isBefore(LocalDate.now())) {
+                return new ResponseEntity<>(new BaseResponse("Due date cannot be in the past", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+
+
+
+            //Check if the project exist
             ProjectEntity projectEntity = projectRepository.findById(projectId).orElse(null);
             if (projectEntity == null) {
                 baseResponse.setMessage("Project with id " + projectId + " not found");
@@ -184,12 +204,17 @@ public class DefaultProjectService implements ProjectService {
         try {
             //Check if the task exist
             BaseResponse baseResponse = new BaseResponse();
+
             TaskEntity taskEntity = taskRepository.findById(taskId).orElse(null);
             if (taskEntity == null) {
                 baseResponse.setMessage("Task with id " + taskId + " not found");
                 baseResponse.setStatus(HttpStatus.NOT_FOUND.value());
                 return new ResponseEntity<>(baseResponse, HttpStatus.NOT_FOUND);
             }
+
+
+
+
 
             if (request.getTitle() != null
                     && !request.getTitle().isEmpty()
