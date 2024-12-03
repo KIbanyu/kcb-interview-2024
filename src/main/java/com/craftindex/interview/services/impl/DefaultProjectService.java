@@ -235,6 +235,10 @@ public class DefaultProjectService implements ProjectService {
 
             if (request.getDueDate() != null
                     && !request.getDueDate().equals(taskEntity.getDueDate())) {
+                if (request.getDueDate().isBefore(LocalDate.now())) {
+                    return new ResponseEntity<>(new BaseResponse("Due date cannot be in the past", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+                }
+
                 taskEntity.setDueDate(request.getDueDate());
             }
 

@@ -1,6 +1,5 @@
 package com.craftindex.interview.models.requests;
 
-import com.craftindex.interview.enums.Status;
 import lombok.Data;
 
 import java.time.LocalDate;
